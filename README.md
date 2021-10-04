@@ -75,5 +75,3 @@ hola`
 - Código (funcionando bajo las especificaciones dadas y bajo cualquier caso de test de parámetros de entrada).
 - Makefile
 - Todo en el GitHub
-
-

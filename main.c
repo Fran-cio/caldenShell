@@ -1,4 +1,6 @@
 #include <stdio.h>
+//sudo apt-get install libncurses5-dev libncursesw5-dev
+#include <curses.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -45,7 +47,7 @@ int main(int argc,char** argv)
 
         if(opt_1!=NULL)
         {
-            if(!strcmp(opt_1,"exit"))
+            if(!strcmp(opt_1,"quit"))
                 exit(0);
 
             if(!strcmp(opt_1,"cd"))
@@ -82,6 +84,10 @@ int main(int argc,char** argv)
                     }
                 }
             } 
+            if(!strcmp(opt_1,"clr"))
+            {
+                system("clear");
+            }
         }
     }
     return 0;

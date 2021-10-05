@@ -1,6 +1,4 @@
 #include <stdio.h>
-//sudo apt-get install libncurses5-dev libncursesw5-dev
-#include <curses.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -50,7 +48,7 @@ int main(int argc,char** argv)
             if(!strcmp(opt_1,"quit"))
                 exit(0);
 
-            if(!strcmp(opt_1,"cd"))
+            else if(!strcmp(opt_1,"cd"))
             {
                 opt_1 = strtok(NULL," ");
                 if(opt_1==NULL)
@@ -84,9 +82,54 @@ int main(int argc,char** argv)
                     }
                 }
             } 
-            if(!strcmp(opt_1,"clr"))
+            else if(!strcmp(opt_1,"clr"))
             {
                 system("clear");
+            }
+            else if (!strcmp(opt_1,"echo"))
+            {
+                opt_1 = strtok(NULL," ");
+                if(opt_1!=NULL)
+                {
+                    if (opt_1[0]=='/' && opt_1[1]=='<') 
+                    {
+                        opt_1[0]='\r';
+                        opt_1[1]='\r';
+                        if (opt_1[0]=='$') {
+                        
+                        }else {
+                            char    *temp;
+                            temp= (char*) calloc(1024,sizeof(char));
+                            int i=0,
+                                j=0;
+                            while (1) {
+                                j=0;
+                                
+                                while (opt_1[j]!='\000') {
+                                    temp[i]=opt_1[j];
+                                    i++,j++;
+                                    if (opt_1[j]=='>') {
+                                        printf("%s",temp);
+                                        i=0;
+                                        break;
+                                    }
+                                }
+                                if(i==0)
+                                    break;
+
+                                temp[i]=' ';
+                                i++;
+                                opt_1=strtok(NULL," ");
+                                if (opt_1==NULL) {
+                                    printf("Inserte '>' para cierre");
+                                    break;
+                                 }
+                            }
+                            free(temp);
+                            printf("\n");
+                        }   
+                    }    
+                }
             }
         }
     }

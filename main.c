@@ -169,13 +169,18 @@ void linea_de_comandos(char* comando)
                     exit(1);
                     break;
                 case 0:
-                    while (comando!=NULL)
+                    //Cantidad maxima de argumentos que la funcion va a aceptar es 3
+                    while (i!=4)
                     {
                         if (i!=0)
                         {
                             temp1=(char**) realloc(temp1,sizeof(char*)*(i+1));
                         }
+                        if(comando!=NULL){
                         temp1[i]=comando;
+                        }else {
+                        temp1[i]="\r";
+                        }
                         comando= strtok(NULL, " ");
                         i++;
                     }
@@ -201,55 +206,18 @@ int ejecutor(char **temp, int args){
     aux=(char*) malloc(sizeof(char)*512);
     aux=strrchr(temp[0],'/');
     aux++;
-    switch (args-1) {
-        case 0:
-            if(execl(temp[0],aux,(char *)0)!=-1)
-                return 0;
-            else 
-            {
-                temp[0]=strcat(temp[0],getenv("PWD"));
-                if (execl(temp[0],aux,(char *)0)!=-1) 
-                    return 0;
-                else 
-                    return -1;
-            }
-            break;
-        case 1:
-            if(execl(temp[0],aux,temp[1],(char *)0)!=-1)
-                return 0;
-            else 
-            {
-                temp[0]=strcat(temp[0],getenv("PWD"));
-                if (execl(temp[0],aux,temp[1],(char *)0)!=-1) 
-                    return 0;
-                else 
-                    return -1;
-            }
-            break;
-        case 2:
-            if(execl(temp[0],aux,temp[1],temp[2],(char *)0)!=-1)
-                return 0;
-            else 
-            {
-                temp[0]=strcat(temp[0],getenv("PWD"));
-                if (execl(temp[0],aux,temp[1],temp[2],(char *)0)!=-1) 
-                    return 0;
-                else 
-                    return -1;
-            }
-            break;
-        case 3:
-            if(execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1)
-                return 0;
-            else 
-            {
-                temp[0]=strcat(temp[0],getenv("PWD"));
-                if (execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1) 
-                    return 0;
-                else 
-                    return -1;
-            }
-            break;
+
+    if(execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1){}
+    else 
+    {
+        temp[0]=strcat(temp[0],getenv("PWD"));
+        if (execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1) {}
+        else 
+        {
+            return -1;
+            free(aux);
+        }
     }
-    return -1;
+    free(aux);
+    return 0;
 }

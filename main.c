@@ -12,12 +12,14 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
+char actual_path[1024];
+
+void linea_de_comandos(char *comandos);
 int ejecutor(char **temp, int args);
 
 int main(int argc,char** argv) 
 {   
-    char    hostname[20],
-    actual_path[1024];
+    char    hostname[20];
 
     if(gethostname(hostname, 20)) 
         exit(1);
@@ -31,113 +33,130 @@ int main(int argc,char** argv)
     setenv("OLDPWD", getenv("PWD"), 1);
 
     getcwd(actual_path, 1024);
-
-    while(1)
+    if (fopen(argv[1],"r")!=NULL)
     {
-        char *opt_1;
-        opt_1= (char*) malloc(sizeof(char)*1024);
-
-        printf( ANSI_COLOR_YELLOW "%s@%s" ANSI_COLOR_RESET ":" 
-                ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET "$ " ,
-                getlogin(),hostname,getenv("PWD"));
-
-        fgets(opt_1,1024,stdin);
-        opt_1[strcspn(opt_1, "\n")] = ' ';
-        opt_1=strtok(opt_1," ");
-
-        if(opt_1!=NULL)
+        FILE *file= fopen(argv[1],"r");
+        char *temp= (char*) malloc(sizeof(char)*512);
+        while (fgets(temp,512,file)!=NULL) {
+            linea_de_comandos(temp);
+        }
+        free(temp);
+    }
+    else
+    {
+        while(1)
         {
-            if(!strcmp(opt_1,"quit"))
+            char *comando;
+            comando= (char*) malloc(sizeof(char)*1024);
+
+            printf( ANSI_COLOR_YELLOW "%s@%s" ANSI_COLOR_RESET ":" 
+                    ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET "$ " ,
+                    getlogin(),hostname,getenv("PWD"));
+
+            fgets(comando,1024,stdin);
+            linea_de_comandos(comando);
+        }
+    }
+    return 0;
+}
+void linea_de_comandos(char* comando)
+{
+    comando[strcspn(comando, "\n")] = ' ';
+    comando=strtok(comando," ");
+
+    if(comando!=NULL)
+    {
+        if(!strcmp(comando,"quit")||!strcmp(comando,"q"))
+        {
+            exit(0);
+        }
+
+        else if(!strcmp(comando,"cd"))
+        {
+            comando = strtok(NULL," ");
+            if(comando==NULL)
             {
-                exit(0);
+                printf("%s\n",getenv("PWD"));
             }
-            
-            else if(!strcmp(opt_1,"cd"))
+            else
             {
-                opt_1 = strtok(NULL," ");
-                if(opt_1==NULL)
+                char temp[1024];
+
+                if(!strcmp(comando,"-"))
                 {
-                    printf("%s\n",getenv("PWD"));
+                    chdir(getenv("OLDPWD"));
+                    setenv("PWD", getenv("OLDPWD"),1);
                 }
                 else
                 {
-                    char temp[1024];
-
-                    if(!strcmp(opt_1,"-"))
+                    if(chdir(comando)==-1)
                     {
-                        chdir(getenv("OLDPWD"));
-                        setenv("PWD", getenv("OLDPWD"),1);
+                        printf("Ruta invalida\n"); 
                     }
                     else
                     {
-                        if(chdir(opt_1)==-1)
-                        {
-                            printf("Ruta invalida\n"); 
-                        }
-                        else
-                        {
-                            getcwd(actual_path,1024);
-                            setenv("OLDPWD", getenv("PWD"),1);
-                            setenv("PWD", actual_path,1);
-                        }
+                        getcwd(actual_path,1024);
+                        setenv("OLDPWD", getenv("PWD"),1);
+                        setenv("PWD", actual_path,1);
                     }
                 }
             }
-            
-            else if(!strcmp(opt_1,"clr"))
+        }
+
+        else if(!strcmp(comando,"clr"))
+        {
+            printf("\033c");
+        }
+        //Aviso: Si pones echo hola$PWD no va a parsear el $, la salida sera hola$PWD 
+        else if (!strcmp(comando,"echo"))
+        {
+            comando = strtok(NULL," ");
+            if(comando!=NULL)
             {
-                printf("\033c");
-            }
-           //Aviso: Si pones echo hola$PWD no va a parsear el $, la salida sera hola$PWD 
-            else if (!strcmp(opt_1,"echo"))
-            {
-                opt_1 = strtok(NULL," ");
-            if(opt_1!=NULL)
+                char    *temp;
+                int i=0,
+                    j=0,
+                    flag_$=0;
+                while (comando!=NULL)
                 {
-                    char    *temp;
-                    int i=0,
-                        j=0,
-                        flag_$=0;
-                    while (opt_1!=NULL)
+                    temp= (char*) calloc(1024,sizeof(char));
+
+                    if (comando[j]!='$')
                     {
-                        temp= (char*) calloc(1024,sizeof(char));
-                        
-                        if (opt_1[j]!='$')
-                        {
-                            j=0;
-                        }
-                        i=0;
-                        while (opt_1[j]!='\000' && (opt_1[j]!='$'||(!flag_$))) 
-                        {   
-                            if (opt_1[0]!='$' || flag_$) 
-                            {
-                                temp[i]=opt_1[j];
-                                i++;
-                            }else {
-                                flag_$=1;
-                            }
-                            j++;
-                        }
-                        if (flag_$)
-                        {
-                            printf("%s ",getenv(temp));
-                            flag_$=0;
-                        }
-                        else 
-                        {
-                            printf("%s ",temp);
-                        }
-                        if (opt_1[j]=='\000') 
-                        {
-                            opt_1=strtok(NULL," ");
-                        }
-                        free(temp);
+                        j=0;
                     }
-                    printf("\n");
+                    i=0;
+                    while (comando[j]!='\000' && (comando[j]!='$'||(!flag_$))) 
+                    {   
+                        if (comando[0]!='$' || flag_$) 
+                        {
+                            temp[i]=comando[j];
+                            i++;
+                        }else {
+                            flag_$=1;
+                        }
+                        j++;
+                    }
+                    if (flag_$)
+                    {
+                        printf("%s ",getenv(temp));
+                        flag_$=0;
+                    }
+                    else 
+                    {
+                        printf("%s ",temp);
+                    }
+                    if (comando[j]=='\000') 
+                    {
+                        comando=strtok(NULL," ");
+                    }
+                    free(temp);
                 }
+                printf("\n");
             }
-            else 
-            {
+        }
+        else 
+        {
             //Insert lo que falta
             int i=0;
             char **temp1;
@@ -150,15 +169,15 @@ int main(int argc,char** argv)
                     exit(1);
                     break;
                 case 0:
-                    while (opt_1!=NULL)
+                    while (comando!=NULL)
                     {
                         if (i!=0)
                         {
                             temp1=(char**) realloc(temp1,sizeof(char*)*(i+1));
                         }
-                       temp1[i]=opt_1;
-                       opt_1= strtok(NULL, " ");
-                       i++;
+                        temp1[i]=comando;
+                        comando= strtok(NULL, " ");
+                        i++;
                     }
                     //Por alguna razon esta funcion no acepta mas de 2 parametros 
                     if(ejecutor(temp1,i)!=-1){}
@@ -174,13 +193,9 @@ int main(int argc,char** argv)
                     break;
             }
             free(temp1);
-            }
         }
     }
-
-    return 0;
 }
-
 int ejecutor(char **temp, int args){
     char *aux;
     aux=(char*) malloc(sizeof(char)*512);

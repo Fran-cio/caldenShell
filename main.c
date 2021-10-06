@@ -85,7 +85,7 @@ int main(int argc,char** argv)
             {
                 printf("\033c");
             }
-            
+           //Aviso: Si pones echo hola$PWD no va a parsear el $, la salida sera hola$PWD 
             else if (!strcmp(opt_1,"echo"))
             {
                 opt_1 = strtok(NULL," ");
@@ -98,9 +98,13 @@ int main(int argc,char** argv)
                     while (opt_1!=NULL)
                     {
                         temp= (char*) calloc(1024,sizeof(char));
-                        j=0;
+                        
+                        if (opt_1[j]!='$')
+                        {
+                            j=0;
+                        }
                         i=0;
-                        while (opt_1[j]!='\000') 
+                        while (opt_1[j]!='\000' && (opt_1[j]!='$'||(!flag_$))) 
                         {   
                             if (opt_1[0]!='$' || flag_$) 
                             {
@@ -120,14 +124,30 @@ int main(int argc,char** argv)
                         {
                             printf("%s ",temp);
                         }
-                        opt_1=strtok(NULL," ");
+                        if (opt_1[j]=='\000') 
+                        {
+                            opt_1=strtok(NULL," ");
+                        }
                         free(temp);
                     }
                     printf("\n");
                 }
             }
             else {
-            //Insert lo que falta  
+            //Insert lo que falta
+            int flag_fork;
+            flag_fork=fork();
+            switch (flag_fork) {
+                case -1:
+                    perror("ha ocurrido un error");
+                    exit(1);
+                    break;
+                case 0:
+                    /*exe*/
+                default:
+                   /*wait();*/
+                    break;
+            }
             }
         }
     }

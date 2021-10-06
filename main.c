@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
@@ -10,6 +11,8 @@
 #define ANSI_COLOR_MAGENTA "\x1b[35m"
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
+
+int ejecutor(char **temp, int args);
 
 int main(int argc,char** argv) 
 {   
@@ -39,7 +42,7 @@ int main(int argc,char** argv)
                 getlogin(),hostname,getenv("PWD"));
 
         fgets(opt_1,1024,stdin);
-        opt_1[strcspn(opt_1, "\r\n")] = ' ';
+        opt_1[strcspn(opt_1, "\n")] = ' ';
         opt_1=strtok(opt_1," ");
 
         if(opt_1!=NULL)
@@ -133,9 +136,13 @@ int main(int argc,char** argv)
                     printf("\n");
                 }
             }
-            else {
+            else 
+            {
             //Insert lo que falta
-            int flag_fork;
+            int i=0;
+            char **temp1;
+            temp1=(char**)malloc(sizeof(char));
+            int flag_fork=0;
             flag_fork=fork();
             switch (flag_fork) {
                 case -1:
@@ -143,14 +150,91 @@ int main(int argc,char** argv)
                     exit(1);
                     break;
                 case 0:
-                    /*exe*/
+                    while (opt_1!=NULL)
+                    {
+                        if (i!=0)
+                        {
+                            temp1=(char**) realloc(temp1,sizeof(char*)*(i+1));
+                        }
+                       temp1[i]=opt_1;
+                       opt_1= strtok(NULL, " ");
+                       i++;
+                    }
+                    //Por alguna razon esta funcion no acepta mas de 2 parametros 
+                    if(ejecutor(temp1,i)!=-1){}
+                    else 
+                    {
+                        printf("Comando desconocido");
+                        exit(0);
+                    }
+                    break;
                 default:
-                   /*wait();*/
+                    wait(0);
+                    printf("\n");
                     break;
             }
+            free(temp1);
             }
         }
     }
-    
+
     return 0;
+}
+
+int ejecutor(char **temp, int args){
+    char *aux;
+    aux=(char*) malloc(sizeof(char)*512);
+    aux=strrchr(temp[0],'/');
+    aux++;
+    switch (args-1) {
+        case 0:
+            if(execl(temp[0],aux,(char *)0)!=-1)
+                return 0;
+            else 
+            {
+                temp[0]=strcat(temp[0],getenv("PWD"));
+                if (execl(temp[0],aux,(char *)0)!=-1) 
+                    return 0;
+                else 
+                    return -1;
+            }
+            break;
+        case 1:
+            if(execl(temp[0],aux,temp[1],(char *)0)!=-1)
+                return 0;
+            else 
+            {
+                temp[0]=strcat(temp[0],getenv("PWD"));
+                if (execl(temp[0],aux,temp[1],(char *)0)!=-1) 
+                    return 0;
+                else 
+                    return -1;
+            }
+            break;
+        case 2:
+            if(execl(temp[0],aux,temp[1],temp[2],(char *)0)!=-1)
+                return 0;
+            else 
+            {
+                temp[0]=strcat(temp[0],getenv("PWD"));
+                if (execl(temp[0],aux,temp[1],temp[2],(char *)0)!=-1) 
+                    return 0;
+                else 
+                    return -1;
+            }
+            break;
+        case 3:
+            if(execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1)
+                return 0;
+            else 
+            {
+                temp[0]=strcat(temp[0],getenv("PWD"));
+                if (execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1) 
+                    return 0;
+                else 
+                    return -1;
+            }
+            break;
+    }
+    return -1;
 }

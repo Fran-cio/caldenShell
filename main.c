@@ -14,22 +14,15 @@
 int main(int argc,char** argv) 
 {   
     char    hostname[20],
-    username[20],
-    actual_path[1024],
-    last_path[1024];
+    actual_path[1024];
 
     if(gethostname(hostname, 20)) 
-        exit(1);
-
-    if(getlogin_r(username,20))
         exit(1);
 
     strcpy(actual_path,"/home/");
     strcpy(actual_path, strcat(actual_path,getlogin()));
 
     setenv("PWD",  actual_path, 1);
-    printf("%s\n",getenv("PWD"));
-
 
     chdir(getenv("PWD"));
     setenv("OLDPWD", getenv("PWD"), 1);
@@ -52,8 +45,10 @@ int main(int argc,char** argv)
         if(opt_1!=NULL)
         {
             if(!strcmp(opt_1,"quit"))
+            {
                 exit(0);
-
+            }
+            
             else if(!strcmp(opt_1,"cd"))
             {
                 opt_1 = strtok(NULL," ");
@@ -64,12 +59,8 @@ int main(int argc,char** argv)
                 else
                 {
                     char temp[1024];
-                    if( !strcmp(opt_1,"/")   ||  !strcmp(opt_1,"/..")    |   
-                            !strcmp(opt_1,"/."))
-                    {
-                        printf("Ruta invalida\n");
-                    }
-                    else if(!strcmp(opt_1,"-"))
+
+                    if(!strcmp(opt_1,"-"))
                     {
                         chdir(getenv("OLDPWD"));
                         setenv("PWD", getenv("OLDPWD"),1);
@@ -89,65 +80,57 @@ int main(int argc,char** argv)
                     }
                 }
             }
+            
             else if(!strcmp(opt_1,"clr"))
             {
                 printf("\033c");
             }
+            
             else if (!strcmp(opt_1,"echo"))
             {
                 opt_1 = strtok(NULL," ");
-                if(opt_1!=NULL)
+            if(opt_1!=NULL)
                 {
-                    if (opt_1[0]=='/' && opt_1[1]=='<') 
-                    {   
-                        char    *temp;
+                    char    *temp;
+                    int i=0,
+                        j=0,
+                        flag_$=0;
+                    while (opt_1!=NULL)
+                    {
                         temp= (char*) calloc(1024,sizeof(char));
-                        opt_1[0]='\r';
-                        opt_1[1]='\r';
-
-                        int i=0,
-                            j=0;
-                        while (1) {
-                            j=0;
-
-                            while (opt_1[j]!='\000') {
-                                if (opt_1[j]!='\r'&&opt_1[j]!='$') 
-                                {
+                        j=0;
+                        i=0;
+                        while (opt_1[j]!='\000') 
+                        {   
+                            if (opt_1[0]!='$' || flag_$) 
+                            {
                                 temp[i]=opt_1[j];
                                 i++;
-                                }
-                                j++;
-                                if (opt_1[j]=='>') {
-                                    i=0;
-                                    break;
-                                }
+                            }else {
+                                flag_$=1;
                             }
-
-                            if(i==0)
-                                break;
-
-                            temp[i]=' ';
-                            i++;
-                            opt_1=strtok(NULL," ");
-                            if (opt_1==NULL) {
-                                printf("Inserte '>' para cierre");
-                                break;
-                            }
+                            j++;
                         }
-                        if (opt_1[2]=='$')
+                        if (flag_$)
                         {
-                            printf("%s",getenv(temp));
+                            printf("%s ",getenv(temp));
+                            flag_$=0;
                         }
                         else 
                         {
-                            printf("%s",temp);
+                            printf("%s ",temp);
                         }
+                        opt_1=strtok(NULL," ");
                         free(temp);
-                        printf("\n");
-                    }    
+                    }
+                    printf("\n");
                 }
+            }
+            else {
+            //Insert lo que falta  
             }
         }
     }
+    
     return 0;
 }

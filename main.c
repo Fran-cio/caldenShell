@@ -26,7 +26,7 @@ int main(int argc,char** argv)
             char *comando;
 
             comando=linea();
-
+//TODO: Revisar porque no anda
             background_flag=segundo_plano(comando); 
             if(!background_flag)
             {

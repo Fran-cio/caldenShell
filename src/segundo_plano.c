@@ -7,6 +7,7 @@
 
 int segundo_plano(char *comando)
 {
+    comando[strcspn(comando, "\n")] = '\000';
     char *temp=(char*) malloc(sizeof(char)*6);
     temp=strrchr(comando, '&');
     if(temp!=NULL){

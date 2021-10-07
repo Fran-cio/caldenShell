@@ -41,7 +41,7 @@ segundo_plano.o: $(PATHrec)segundo_plano.c  $(PATHrec)linea_de_comandos.c
 
 libtp4.a: cd.o echo.o leer_desde_script.o linea_de_comandos.o programa_externo.o segundo_plano.o
 	mkdir -p $(PATHlib) 
-	ar cr $(PATHlib)libtp4.a $(PATHout)cd.o $(PATHout)echo.o $(PATHout)leer_desde_script.o $(PATHout)linea_de_comandos.o $(PATHout)programa_externo.o $(PATHout)segundo_plano.o
+	ar cr $(PATHlib)libtp4.a $(PATHout)cd.o $(PATHout)echo.o $(PATHout)leer_desde_script.o $(PATHout)linea_de_comandos.o $(PATHout)segundo_plano.o $(PATHout)programa_externo.o 
 
 clean:
 	rm -f -d $(PATHlib)* $(PATHlib) $(PATHout)* $(PATHout) $(PATHbin)* $(PATHbin) 

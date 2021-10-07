@@ -19,6 +19,7 @@ int ejecutor(char **temp, int args);
 
 int main(int argc,char** argv) 
 {   
+    int background_flag;
     char    hostname[20];
 
     if(gethostname(hostname, 20)) 
@@ -46,6 +47,7 @@ int main(int argc,char** argv)
     {
         while(1)
         {
+            background_flag=0; 
             char *comando;
             comando= (char*) malloc(sizeof(char)*1024);
 
@@ -54,14 +56,35 @@ int main(int argc,char** argv)
                     getlogin(),hostname,getenv("PWD"));
 
             fgets(comando,1024,stdin);
-            linea_de_comandos(comando);
+ 
+            comando[strcspn(comando, "\n")] = '\000';
+    
+            char *temp=(char*) malloc(sizeof(char)*6);
+            temp=strrchr(comando, '&');
+            if(temp!=NULL){
+                if (!strcmp(temp,"&")){
+                    if(fork()==0){
+                        comando[strcspn(comando, "&")] = '\000';
+                        printf("[%d] %d \n",1,getpid());
+                        linea_de_comandos(comando);
+                        printf("[%d] + %d done\n",1,getpid());
+                        exit(0);
+                    }else {
+                        background_flag=1;
+                        wait(0);
+                    }
+                }
+            }
+            if(!background_flag)
+            {
+                linea_de_comandos(comando);
+            }
         }
     }
     return 0;
 }
 void linea_de_comandos(char* comando)
 {
-    comando[strcspn(comando, "\n")] = ' ';
     comando=strtok(comando," ");
 
     if(comando!=NULL)
@@ -177,9 +200,9 @@ void linea_de_comandos(char* comando)
                             temp1=(char**) realloc(temp1,sizeof(char*)*(i+1));
                         }
                         if(comando!=NULL){
-                        temp1[i]=comando;
+                            temp1[i]=comando;
                         }else {
-                        temp1[i]="\r";
+                            temp1[i]="\r";
                         }
                         comando= strtok(NULL, " ");
                         i++;

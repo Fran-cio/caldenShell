@@ -8,6 +8,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+
+void help(void);
+
 void comandos(char* comando)
 {   
     comando[strcspn(comando, "\n")] = '\000';
@@ -34,6 +37,10 @@ void comandos(char* comando)
         else if (!strcmp(comando,"echo"))
         {
             echo(comando); 
+        }
+        else if (!strcmp(comando,"help"))
+        {
+            help(); 
         }
         else 
         {
@@ -71,4 +78,9 @@ void setear_entorno()
     setenv("OLDPWD", getenv("PWD"), 1);
 
     return;
+}
+
+void help(void)
+{
+    printf("Por favor ingrese uno de los siguiente comandos:\n\tclr: Limpia la consola\n\techo <comando|env path>: imprime por pantalla el argumento\n\tcd <path>: Coloca el directorio de trabajo en el path asignado\n\tquit: cierra la consola\nPuede ingresar el path de un programa para ejecutarlo\nPuede ejecutar My_Shell con el path de un script de la manera ./myshell <script>\n");
 }

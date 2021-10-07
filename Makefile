@@ -6,38 +6,42 @@ PATHout=./out/
 PATHlib=./lib/
 PATHbin=./bin/
 
-main: main.o libtp3.a libcjson.so 
+my_shell: my_shell.o libtp4.a 
 	mkdir -p $(PATHbin)
-	$(CC) $(CFLAGS) -o $(PATHbin)main $(PATHout)main.o -L$(PATHlib) -ltp3 -ldl -Wl,-rpath,$(PATHlib)
+	$(CC) $(CFLAGS) -o $(PATHbin)my_shell $(PATHout)my_shell.o -L$(PATHlib) -ltp4 
 
-main.o: main.c $(PATHh)function.h
+my_shell.o: main.c 
 	mkdir -p $(PATHout)
 	$(CC) $(CFLAGS) -c main.c
-	mv ./main.o $(PATHout)
+	mv ./main.o $(PATHout)/my_shell.o
 
-punto1.o: $(PATHrec)punto1.c $(PATHh)function.h 
-	$(CC) $(CFLAGS) -c $(PATHrec)punto1.c
-	mv ./punto1.o $(PATHout)
+cd.o: $(PATHrec)cd.c 
+	$(CC) $(CFLAGS) -c $(PATHrec)cd.c
+	mv ./cd.o $(PATHout)
 
-punto2.o: $(PATHrec)punto2.c $(PATHh)function.h
-	$(CC) $(CFLAGS) -c $(PATHrec)punto2.c
-	mv ./punto2.o $(PATHout)
+echo.o: $(PATHrec)echo.c
+	$(CC) $(CFLAGS) -c $(PATHrec)echo.c
+	mv ./echo.o $(PATHout)
 
-cJSON.o: $(PATHrec)cJSON.c
-	$(CC) $(CFLAGS) -c $(PATHrec)cJSON.c
-	mv ./cJSON.o $(PATHout)
+leer_desde_script.o: $(PATHrec)leer_desde_script.c  $(PATHrec)linea_de_comandos.c
+	$(CC) $(CFLAGS) -c $(PATHrec)leer_desde_script.c 
+	mv ./leer_desde_script.o $(PATHout)
 
-filesystem.o: $(PATHrec)filesystem.c 
-	$(CC) $(CFLAGS) -c $(PATHrec)filesystem.c
-	mv ./filesystem.o $(PATHout)
+linea_de_comandos.o: $(PATHrec)linea_de_comandos.c  $(PATHrec)programa_externo.c $(PATHrec)segundo_plano.c
+	$(CC) $(CFLAGS) -c $(PATHrec)linea_de_comandos.c 
+	mv ./linea_de_comandos.o $(PATHout)
+	
+programa_externo.o: $(PATHrec)programa_externo.c  
+	$(CC) $(CFLAGS) -c $(PATHrec)programa_externo.c 
+	mv ./programa_externo.o $(PATHout)
 
-libtp3.a: punto1.o punto2.o cJSON.o
+segundo_plano.o: $(PATHrec)segundo_plano.c  $(PATHrec)linea_de_comandos.c
+	$(CC) $(CFLAGS) -c $(PATHrec)segundo_plano.c 
+	mv ./segundo_plano.o $(PATHout)
+
+libtp4.a: cd.o echo.o leer_desde_script.o linea_de_comandos.o programa_externo.o segundo_plano.o
 	mkdir -p $(PATHlib) 
-	ar cr $(PATHlib)libtp3.a $(PATHout)punto1.o $(PATHout)punto2.o $(PATHout)cJSON.o 
-
-libcjson.so: filesystem.o cJSON.o
-	$(CC) $(CFLAGS) -shared -fPIC -o libcjson.so $(PATHout)filesystem.o $(PATHout)cJSON.o 
-	mv ./libcjson.so $(PATHlib)
+	ar cr $(PATHlib)libtp4.a $(PATHout)cd.o $(PATHout)echo.o $(PATHout)leer_desde_script.o $(PATHout)linea_de_comandos.o $(PATHout)programa_externo.o $(PATHout)segundo_plano.o
 
 clean:
 	rm -f -d $(PATHlib)* $(PATHlib) $(PATHout)* $(PATHout) $(PATHbin)* $(PATHbin) 

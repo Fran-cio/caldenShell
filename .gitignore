@@ -1,4 +1,4 @@
 *.o
 *.out
 *.a
-main
+my_shell

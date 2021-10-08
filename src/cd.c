@@ -7,8 +7,13 @@ void retornar();
 void setear_directorio();
 
 void cd(char *comando){
-    comando = strtok(NULL," ");
-    if(comando==NULL)
+    /*
+     *  Pedimos el siguiente token del comando que se supone que es el path que se
+     *  exige
+     */
+    comando = strtok(NULL," "); 
+
+    if(comando==NULL)// Si el comando es "cd" devolvemos el espacio de trabajo actual
     {
         printf("%s\n",getenv("PWD"));
     }
@@ -16,13 +21,35 @@ void cd(char *comando){
     {
         if(!strcmp(comando,"-"))
         {
+            /*
+             *  Si el comando es "cd -" retornamos el PWD a OLDPWD
+             */
             retornar();
         }
         else
         {
-            if(chdir(comando)==-1)
+            if(comando[0]=='$') //Si el primer char es '$' se trata de una var env
             {
-                printf("Ruta invalida\n"); 
+                comando++;//movemos el puntero descartando '$'
+                if(chdir(getenv(comando))==-1)
+                {
+                    /*
+                     *  Se intenta cambiar el PWD y si no se puede se especifica
+                     */
+                    perror("Entorno invalido"); 
+                }
+                else
+                {
+                    setear_directorio();
+                }   
+            }
+            /*
+             * Sino es una var env, se deberia tratar del path o el dir
+             * al que se quiere cambiar, y se hace lo mismo que antes
+             */
+            else if(chdir(comando)==-1)
+            {
+                perror("Ruta invalida"); 
             }
             else
             {
@@ -33,19 +60,22 @@ void cd(char *comando){
 }
 
 void setear_directorio(void)
-{
-    char actual_path[1024];
+{   
+    char temp[1024]; //La memoria reservada para la variable busca solamente no quedarse corta 
 
-    getcwd(actual_path,1024);
-    setenv("OLDPWD", getenv("PWD"),1);
-    setenv("PWD", actual_path,1);
+    getcwd(temp,1024); //guardo el entorno de trabajo actual y lo guardo en temp
+    setenv("OLDPWD", getenv("PWD"),1); //Swapeo el entorno OLDPWD con el anterior
+    setenv("PWD", temp,1); //actualizo la variable de entorno PWD
 
     return;
 }
 
 void retornar(void){
+    /*
+     *  Seteamos el espacio de trabajo con lo almacenado en la var env OLDPWD
+     */ 
     chdir(getenv("OLDPWD"));
-    setenv("PWD", getenv("OLDPWD"),1);
+    setear_directorio();
 
     return;
 }

@@ -1,1 +1,1 @@
-void ejecutar_script(char*);
+int ejecutar_script(char*);

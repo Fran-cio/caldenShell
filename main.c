@@ -18,12 +18,11 @@ int main(int argc,char** argv)
     setear_entorno();
 
     /*
-     * Comprueba si el argumento que se mando es efectivamente un archivo leeible
-     * De ser asi, ejecuta la rutina que lo maneja
+     *  Recibe el arg1, que si es un archivo valido, lo abra y ejecute 
      */
-    if (fopen(argv[1],"r")!=NULL)
+    if(ejecutar_script(argv[1]))
     {
-        ejecutar_script(argv[1]);
+        //esto esta asi para que si entra, no ejecute lo siguiente   
     }
     else
     {

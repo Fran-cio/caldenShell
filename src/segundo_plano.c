@@ -16,7 +16,7 @@ int segundo_plano(char *comando)
      *  Con la variable temp me aseguro que el ultimo valor sea '&' indicando
      *  que el comando que lo precede debe ejecutarse en 2do plano.
      */
-    char *temp=(char*) malloc(sizeof(char)*6);
+    char *temp;
     temp=strrchr(comando, '&');
 
     if(temp!=NULL){ //si se encontro el caracter '&', !=NULL

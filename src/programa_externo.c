@@ -52,20 +52,20 @@ void programa_externo(char *comando)
 int ejecutor(char **temp)
 {
     char *aux;
-    aux=(char*) malloc(sizeof(char)*512);
+    /*
+     * filtro el nombre del programa siendo este lo que este despues de la ultima
+     * '/', se almacena eso y se elimina la '/'
+     */
     aux=strrchr(temp[0],'/');
     aux++;
 
+    /*
+     * Si se ejecuta, bien, sino devuelve -1
+     */
     if(execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1){}
     else 
     {
-        temp[0]=strcat(temp[0],getenv("PWD"));
-        if (execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1) {}
-        else 
-        {
-            return -1;
-            free(aux);
-        }
+        return -1;
     }
     free(aux);
     return 0;
@@ -90,8 +90,16 @@ char** ordenar_argumentos(char* comando)
          * agregamos palabras
          */
         if (i!=0)
-        {
-            temp=(char**) realloc(temp,sizeof(char*)*(i+1));
+        {   
+            void *memleek_saver = (char**) realloc(temp,sizeof(char*)*(i+1));
+            if (NULL == memleek_saver)
+            {
+                perror("\0");
+            }
+            else
+            {
+                temp = memleek_saver;
+            }
         }
         if(comando!=NULL)
         {
@@ -110,3 +118,4 @@ char** ordenar_argumentos(char* comando)
     }
     return temp;
 } 
+

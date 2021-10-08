@@ -92,10 +92,12 @@ char* linea()
      */
     char *comando;
     comando= (char*) malloc(sizeof(char)*1024);
-
+    
+    char *hostname=get_hostname();
     printf( ANSI_COLOR_YELLOW "%s@%s" ANSI_COLOR_RESET ":" 
             ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET "$ " ,
-            getlogin(),get_hostname(),getenv("PWD"));
+            getlogin(),hostname,getenv("PWD"));
+    free(hostname);
 
     fgets(comando,1024,stdin);
 

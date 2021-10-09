@@ -25,7 +25,7 @@
 
 ###5. Background execution
 
-* El programa antes de enviar el comando a ejecutarse verifica si posee un & en su ultima posicion (Recalcar lo de ultima posicion). Este entra a una subrutina donde genera un proceso hijo que se encarga de la ejecucion del comando. Cuando el comando acaba se genera un exit. A todo esto el comando padre se queda en un wait con el fin de evitar procesos zombies.
+* El programa antes de enviar el comando a ejecutarse verifica si posee un & en su ultima posicion (Recalcar lo de ultima posicion). Este entra a una subrutina donde genera un proceso hijo que se encarga de la ejecucion del comando. Cuando el comando acaba se genera un exit. El proceso padre no espera que se termine de ejecutar, pero al salir del programa se ejecuta una subrutina que espera que todos los hijos terminen para evitar zombies.
 
 ##Notas al margen
 

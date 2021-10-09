@@ -11,6 +11,7 @@
 
 void print_mensaje_de_intro();
 void help(void);
+void dormir(char*);
 
 void comandos(char* comando)
 {
@@ -59,6 +60,10 @@ void comandos(char* comando)
         {
             help(); 
         }
+        else if(!strcmp(comando,"dormir"))
+        {
+            dormir(comando);
+        }
         else 
         {
             /*
@@ -92,9 +97,9 @@ char* linea()
      */
     char *comando;
     comando= (char*) malloc(sizeof(char)*1024);
-    
+
     char *hostname=get_hostname();
-    printf( ANSI_COLOR_YELLOW "%s@%s" ANSI_COLOR_RESET ":" 
+    printf( ANSI_COLOR_YELLOW "\r%s@%s" ANSI_COLOR_RESET ":" 
             ANSI_COLOR_CYAN "%s" ANSI_COLOR_RESET "$ " ,
             getlogin(),hostname,getenv("PWD"));
     free(hostname);
@@ -130,6 +135,30 @@ void setear_entorno()
     return;
 }
 
+/* 
+ * Para testear el 2do plano implente este sleep
+ */
+
+void dormir(char* comando)
+{
+    comando=strtok(NULL," ");
+    if(comando!=NULL)
+    {
+        if(atoi(comando))
+        {
+            sleep(atoi(comando));
+        }
+        else
+        {
+            printf("Ingrese un numero valido\n\r");
+        }
+    }
+    else
+    {
+        printf("Ingrese un valor\n\r");
+    }
+    return;
+}
 /*
  * Se ilustran los comandos disponibles y las funcionalidades
  */

@@ -4,11 +4,12 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-char** ordenar_argumentos(char* comando);
-int ejecutor(char**);
+char** ordenar_argumentos(char* comando,int *i);
+int ejecutor(char**,int);
 
 void programa_externo(char *comando)
 {
+    int i;
     char **temp;
     int flag_fork=0;
     /*
@@ -27,13 +28,13 @@ void programa_externo(char *comando)
              *  La funcion ordenar_argumentos, devuelve el programa y los argumentos
              *  almacenados en un arreglo de strings
              */
-            temp=ordenar_argumentos(comando); 
+            temp=ordenar_argumentos(comando,&i); 
 
             /*
              *  ejecutor() recibe este arreglo y los parcea para manejarlos de la
              *  manera correcta, si puede hacerlo, devuelve -1, sino da un mensaje
              */
-            if(ejecutor(temp)!=-1){}
+            if(ejecutor(temp,i)!=-1){}
             else 
             {
                 printf("Comando desconocido, ingrese help para conocerlos comandos"
@@ -49,7 +50,7 @@ void programa_externo(char *comando)
     }
 }
 
-int ejecutor(char **temp)
+int ejecutor(char **temp,int i)
 {
     char *aux;
     /*
@@ -61,37 +62,65 @@ int ejecutor(char **temp)
 
     /*
      * Si se ejecuta, bien, sino devuelve -1
+     *
+     * No es la implementacion mas elegante pero es la mas simple para cumplir
+     * lo que se requiere, ya que execl no interpreta los espacios del arreglo
+     * vacios como espacios vacios
      */
-    if(execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1){}
-    else 
-    {
-        return -1;
+    switch (i-1) {
+        case 0:
+            if(execl(temp[0],aux,(char *)0)!=-1){}
+            else 
+            {
+                return -1;
+            }
+            break;
+        case 1:
+            if(execl(temp[0],aux,temp[1],(char *)0)!=-1){}
+            else 
+            {
+                return -1;
+            }
+            break;
+        case 2:
+            if(execl(temp[0],aux,temp[1],temp[2],(char *)0)!=-1){}
+            else 
+            {
+                return -1;
+            }
+            break;
+        case 3:
+            if(execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1){}
+            else 
+            {
+                return -1;
+            }
     }
     free(aux);
     return 0;
 }
 
-char** ordenar_argumentos(char* comando)
+char** ordenar_argumentos(char* comando,int *i)
 {
     //Cantidad maxima de argumentos que la funcion va a aceptar es 3
     char **temp;
     temp=(char**)malloc(sizeof(char));
-    int i=0;
+    *i=0;
     /*
      * Inicialemente se implemento este formato de arreglo dinamico porque se penso
      * para un programa que ingrese n cantidad de argumentos para el programa
-     * esto finalmente por la limitacion de usar execl, limite la cantidad de 
-     * argumentos almacenados a 3
+     * esto finalmente por la limitacion de usar execl, no se van a aprovechar
+     * mas de 3 argumentos ingresados
      */
-    while (i!=4)
+    while (comando!=NULL)
     {
         /*
          * Este realloc va generando alocacion de memoria en base a medida que
          * agregamos palabras
          */
-        if (i!=0)
+        if (*i!=0)
         {   
-            void *memleek_saver = (char**) realloc(temp,sizeof(char*)*(i+1));
+            void *memleek_saver = (char**) realloc(temp,sizeof(char*)*(*i+1));
             if (NULL == memleek_saver)
             {
                 perror("\0");
@@ -103,18 +132,10 @@ char** ordenar_argumentos(char* comando)
         }
         if(comando!=NULL)
         {
-            temp[i]=comando; //Si tengo comando, lo guardo en el arreglo
-        }
-        else
-        {
-            temp[i]="\r";   //Si no tengo, ya lo relleno con \r 
-            /*
-             * Esto se hace de esta manera porque execl no toma en cuenta este
-             * argumento
-             */
+            temp[*i]=comando; //Si tengo comando, lo guardo en el arreglo
         }
         comando= strtok(NULL, " ");
-        i++;
+        *i+=1;
     }
     return temp;
 } 

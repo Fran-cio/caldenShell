@@ -3,13 +3,24 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <sys/mman.h>
 #include "../include/linea_de_comandos.h"
 
 void finalizar(void);
-int contador_de_back=0;
+int *punt_cont;
 
 int segundo_plano(char *comando)
 {
+    /*
+     * Asigno el puntero a una direccion de memoria compartida para que ambos pro
+     * cesos tengan accesos a el. Notar que no estoy teniendo en cuenta posibles
+     * peligros de concurrencia
+     */
+    if(punt_cont==NULL)
+    {
+        punt_cont= (int*)mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE,
+                MAP_SHARED | MAP_ANONYMOUS, -1, 0);;
+    }
     /*
      *  Este comando tiene la funcion quitar el caracter '\n' ya que dificulta
      *  el uso de los comandos ingresados
@@ -20,38 +31,27 @@ int segundo_plano(char *comando)
      *  que el comando que lo precede debe ejecutarse en 2do plano.
      */
     char *temp;
-    /*
-     * utilizo esto para que cada vez que se termine un proceso, devuelva un 0
-     * y en ese momento reduzca el contador_de_back, no es tan precisos pero 
-     * funciona
-     */
-    int status;
     temp=strrchr(comando, '&');
-    waitpid(-1, &status, WNOHANG); 
-    if (!WIFSIGNALED(status))
-    {
-        contador_de_back--;
-    }
     if(temp!=NULL){ //si se encontro el caracter '&', !=NULL
         if (!strcmp(temp,"&"))//Si se encontro, asegurarse que es efectivamente el ultimo caracter
         {
             if(fork()==0) //El proceso hijo entra al if
             {
-                int jobID=contador_de_back+1;
+                int jobID=*punt_cont+1;
                 /*
                  *  Trabajo del proceso hijo 
                  */
                 comando[strcspn(comando, "&")] = '\000'; //Elimino el caracter '&'
                 /*
-                 *  imprimo el pid, lamentablente desconozco como obtener el job id
-                 *  asi que imprimo 1.
-                 *  El comando es enviado a la funcion comando que hace el trabajo
-                 *  encomendado y cuando termina imprime que termino y sale.
+                 * Imprimo los indicadores de back y ejecuto el programa
                  */
                 printf("\r[%d] %d \n",jobID,getpid()); 
                 comandos(comando);
                 printf("\r[%d] + %d done\n",jobID,getpid());
-
+                /*
+                 * Descuento el contador al salir del programa
+                 */
+                *punt_cont-=1;
                 exit(0);
             }
             else
@@ -65,7 +65,10 @@ int segundo_plano(char *comando)
                  */
                 atexit(finalizar); 
                 sleep(1);//para que no se superpongan salidas, coloco un pequeño delay
-                contador_de_back++;
+                /*
+                 * Aumento el contador de tareas en back
+                 */
+                *punt_cont+=1;
                 /*
                  *  Al devolver 1, inico que el comando ya fue ejecutado por el
                  *  proceso hijo
@@ -79,4 +82,8 @@ int segundo_plano(char *comando)
 void finalizar(void)
 {
     wait(0);
+    /*
+     * Libero el espacio de memoria compartido
+     */
+    munmap(punt_cont, sizeof(int));
 }

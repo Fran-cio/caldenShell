@@ -12,16 +12,6 @@ int *punt_cont;
 int segundo_plano(char *comando)
 {
     /*
-     * Asigno el puntero a una direccion de memoria compartida para que ambos pro
-     * cesos tengan accesos a el. Notar que no estoy teniendo en cuenta posibles
-     * peligros de concurrencia
-     */
-    if(punt_cont==NULL)
-    {
-        punt_cont= (int*)mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE,
-                MAP_SHARED | MAP_ANONYMOUS, -1, 0);;
-    }
-    /*
      *  Este comando tiene la funcion quitar el caracter '\n' ya que dificulta
      *  el uso de los comandos ingresados
      */
@@ -35,6 +25,17 @@ int segundo_plano(char *comando)
     if(temp!=NULL){ //si se encontro el caracter '&', !=NULL
         if (!strcmp(temp,"&"))//Si se encontro, asegurarse que es efectivamente el ultimo caracter
         {
+            /*
+             * Asigno el puntero a una direccion de memoria compartida para que ambos pro
+             * cesos tengan accesos a el. Notar que no estoy teniendo en cuenta posibles
+             * peligros de concurrencia
+             */
+            if(punt_cont==NULL)
+            {
+                punt_cont= (int*)mmap(NULL, sizeof(int), PROT_READ | PROT_WRITE,
+                        MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+            }
+
             if(fork()==0) //El proceso hijo entra al if
             {
                 int jobID=*punt_cont+1;

@@ -109,36 +109,9 @@ char* linea()
     return comando;
 }
 
-void setear_entorno()
-{
-    char temp[1024];
-
-    /*
-     * genero mi path $HOME, y lo asigo a la variable de entorno que correspond
-     */
-    strcpy(temp,"/home/");
-    strcpy(temp, strcat(temp,getlogin()));
-
-    setenv("HOME",  temp, 1);
-
-    /*
-     * Luego obtengo el directorio de trabajo y lo asigno a la variable de entorno
-     * $PWD
-     */
-    getcwd(temp,1024);
-    setenv("PWD", temp,1);
-
-    setenv("OLDPWD", getenv("PWD"), 1);//Genero la var de entorno OLDPWD
-
-    print_mensaje_de_intro();
-
-    return;
-}
-
 /* 
  * Para testear el 2do plano implente este sleep
  */
-
 void dormir(char* comando)
 {
     comando=strtok(NULL," ");
@@ -178,11 +151,11 @@ void help(void)
  */
 void print_mensaje_de_intro(void)
 {
-    printf( "\n/*"
+    printf( "\n/*------------------------------------------------------------------------------------------*"
             "\n *\tCalden-shell es la primera shell desarrollada al 100 en la Pampa (O eso creeria)"
             "\n *\tcreada por Francisco Ciordia Cantarella para la materia de Sistemas"
             "\n *\toperativos 1."
             "\n *\t"
             "\n *\tPor favor, ingresa help para ver las funciones disponible."
-            "\n */\n\n");
+            "\n */------------------------------------------------------------------------------------------*\n\n");
 }

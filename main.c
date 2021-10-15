@@ -13,10 +13,9 @@ int main(int argc,char** argv)
     int background_flag;        //Si hay un proceso corriendo en segundo plano, se activa
 
     /*
-     * Da mensaje de bienvenida y setea los entornos de trabajo
+     * Da mensaje de bienvenida 
      */
-    setear_entorno();
-
+    print_mensaje_de_intro();
     /*
      *  Recibe el arg1, que si es un archivo valido, lo abra y ejecute 
      */

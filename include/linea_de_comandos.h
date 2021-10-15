@@ -3,6 +3,6 @@
 
 void comandos(char* comando);
 char* linea();
-void setear_entorno();
+void print_mensaje_de_intro();
 
 #endif

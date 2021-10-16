@@ -1,5 +1,7 @@
-#include "../include/echo.h"
-#include "../include/cd.h"
+#include "../include/comandos/echo.h"
+#include "../include/comandos/cd.h"
+#include "../include/comandos/quit.h"
+#include "../include/comandos/clr.h"
 #include "../include/programa_externo.h"
 #include "../include/segundo_plano.h"
 #include "../include/colorines.h"
@@ -29,7 +31,7 @@ void comandos(char* comando)
          */
         if(!strcmp(comando,"quit")||!strcmp(comando,"q"))
         {
-            exit(0);
+            quit();
         }
 
         /*
@@ -45,7 +47,7 @@ void comandos(char* comando)
          */
         else if(!strcmp(comando,"clr"))
         {
-            printf("\033c");
+            clr();
         }
         /*
          *  El comando echo escribe en pantalla un comentario o devuelve una
@@ -59,10 +61,6 @@ void comandos(char* comando)
         else if (!strcmp(comando,"help"))
         {
             help(); 
-        }
-        else if(!strcmp(comando,"dormir"))
-        {
-            dormir(comando);
         }
         else 
         {
@@ -109,29 +107,6 @@ char* linea()
     return comando;
 }
 
-/* 
- * Para testear el 2do plano implente este sleep
- */
-void dormir(char* comando)
-{
-    comando=strtok(NULL," ");
-    if(comando!=NULL)
-    {
-        if(atoi(comando))
-        {
-            sleep(atoi(comando));
-        }
-        else
-        {
-            printf("Ingrese un numero valido\n\r");
-        }
-    }
-    else
-    {
-        printf("Ingrese un valor\n\r");
-    }
-    return;
-}
 /*
  * Se ilustran los comandos disponibles y las funcionalidades
  */

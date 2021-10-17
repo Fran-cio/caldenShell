@@ -62,7 +62,7 @@ int ejecutor(char **temp)
         /*
          * Si se ejecuta, bien, sino devuelve -1
          */
-       if(execv(temp[0],temp)!=-1){}
+        if(execv(temp[0],temp)!=-1){}
         else 
         {
             return -1;

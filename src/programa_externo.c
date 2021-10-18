@@ -1,3 +1,6 @@
+#include "../include/tp5/signals.h"
+
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,6 +26,7 @@ void programa_externo(char *comando)
             exit(1);
             break;
         case 0:
+            set_func_sig(SIG_DFL);
             /*
              *  La funcion ordenar_argumentos, devuelve el programa y los argumentos
              *  almacenados en un arreglo de strings

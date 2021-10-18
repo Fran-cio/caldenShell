@@ -1,7 +1,11 @@
+#include "./include/tp5/signals.h"
+#include "./include/tp5/pipe.h"
+
 #include "./include/linea_de_comandos.h"
 #include "./include/segundo_plano.h"
 #include "./include/leer_desde_script.h"
 
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,6 +14,8 @@
 
 int main(int argc,char** argv) 
 {   
+    set_func_sig(SIG_IGN);
+
     int background_flag;        //Si hay un proceso corriendo en segundo plano, se activa
 
     /*
@@ -34,6 +40,11 @@ int main(int argc,char** argv)
              * La funcion devuelve un mensaje ingresado por teclado
              */
             comando=linea();
+            printf("entra: %s\n",comando);
+            if (strchr(comando, '|')!=NULL) {
+                comando = get_pipe(comando);
+            }
+            printf("sale :%s\n",comando);
             /*
              * Verifica si efectivamente el comando tiene la orden de ser
              * ejecutado en 2do plano

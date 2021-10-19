@@ -20,14 +20,18 @@ $(PATHbin)my_shell: $(PATHout)my_shell.o $(PATHlib)libtp4.a $(PATHlib)lib_comand
 $(PATHout)signals.o: $(PATHrec_tp5)signals.c 
 	$(CC) $(CFLAGS) -c $(PATHrec_tp5)signals.c
 	mv ./signals.o $(PATHout)
+	
+$(PATHout)I.O.o: $(PATHrec_tp5)I.O.c 
+	$(CC) $(CFLAGS) -c $(PATHrec_tp5)I.O.c
+	mv ./I.O.o $(PATHout)
 
 $(PATHout)pipe.o: $(PATHrec_tp5)pipe.c 
 	$(CC) $(CFLAGS) -c $(PATHrec_tp5)pipe.c
 	mv ./pipe.o $(PATHout)
 
-$(PATHlib)lib_tp5.a: $(PATHout)signals.o $(PATHout)pipe.o
+$(PATHlib)lib_tp5.a: $(PATHout)signals.o $(PATHout)pipe.o $(PATHout)I.O.o
 	mkdir -p $(PATHlib) 
-	ar cr $(PATHlib)lib_tp5.a  $(PATHout)signals.o $(PATHout)pipe.o
+	ar cr $(PATHlib)lib_tp5.a  $(PATHout)signals.o $(PATHout)pipe.o $(PATHout)I.O.o
 
 $(PATHout)my_shell.o: main.c 
 	mkdir -p $(PATHout)

@@ -1,5 +1,6 @@
 #include "./include/tp5/signals.h"
 #include "./include/tp5/pipe.h"
+#include "./include/tp5/I.O.h"
 
 #include "./include/linea_de_comandos.h"
 #include "./include/segundo_plano.h"
@@ -18,6 +19,7 @@ int main(int argc,char** argv)
 
     int background_flag;        //Si hay un proceso corriendo en segundo plano, se activa
     int pipe_flag;
+    int IO_flag;
     /*
      * Da mensaje de bienvenida 
      */
@@ -35,6 +37,7 @@ int main(int argc,char** argv)
         {
             background_flag=0;  //La flag se inicia en 0 
             pipe_flag=0;
+            IO_flag=0;
             char *comando;      //los comandos ingresados se almacenan aqui
 
             /*
@@ -45,6 +48,7 @@ int main(int argc,char** argv)
                 get_pipe(comando);
                 pipe_flag=1;
             }
+            IO_flag=IO(comando);
             /*
              * Verifica si efectivamente el comando tiene la orden de ser
              * ejecutado en 2do plano
@@ -58,7 +62,7 @@ int main(int argc,char** argv)
              *  lo cual hubiera sintetizado el codigo y eliminado esa variable
              *  pero sin duda hubiera sido mas dificil de seguir.
              */
-            if(!background_flag&&!pipe_flag)
+            if(!background_flag&&!pipe_flag&&!IO_flag)
             {
                 /*
                  *  Si la background_flag esta en bajo, el comando se ejecuta con

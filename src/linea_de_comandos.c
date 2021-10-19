@@ -94,7 +94,7 @@ char* linea()
      * linea de comando (de ahi el nombre del metodo),
      */
     char *comando;
-    comando= (char*) malloc(sizeof(char)*100000);
+    comando= (char*) malloc(sizeof(char)*1024);
 
     char *hostname=get_hostname();
     printf( ANSI_COLOR_YELLOW "\r%s@%s" ANSI_COLOR_RESET ":" 

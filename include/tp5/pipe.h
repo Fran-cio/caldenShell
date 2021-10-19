@@ -1,2 +1,2 @@
-char* get_pipe(char* comando);
+void get_pipe(char* comando);
 

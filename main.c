@@ -17,7 +17,7 @@ int main(int argc,char** argv)
     set_func_sig(SIG_IGN);
 
     int background_flag;        //Si hay un proceso corriendo en segundo plano, se activa
-
+    int pipe_flag;
     /*
      * Da mensaje de bienvenida 
      */
@@ -34,17 +34,17 @@ int main(int argc,char** argv)
         while(1)
         {
             background_flag=0;  //La flag se inicia en 0 
+            pipe_flag=0;
             char *comando;      //los comandos ingresados se almacenan aqui
 
             /*
              * La funcion devuelve un mensaje ingresado por teclado
              */
             comando=linea();
-            printf("entra: %s\n",comando);
             if (strchr(comando, '|')!=NULL) {
-                comando = get_pipe(comando);
+                get_pipe(comando);
+                pipe_flag=1;
             }
-            printf("sale :%s\n",comando);
             /*
              * Verifica si efectivamente el comando tiene la orden de ser
              * ejecutado en 2do plano
@@ -58,7 +58,7 @@ int main(int argc,char** argv)
              *  lo cual hubiera sintetizado el codigo y eliminado esa variable
              *  pero sin duda hubiera sido mas dificil de seguir.
              */
-            if(!background_flag)
+            if(!background_flag&&!pipe_flag)
             {
                 /*
                  *  Si la background_flag esta en bajo, el comando se ejecuta con

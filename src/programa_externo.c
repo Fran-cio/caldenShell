@@ -117,19 +117,17 @@ int ejecutor(char **temp)
     }
     else
     {
-        aux=(char*)malloc(sizeof(char)*1024);
         char    nombre_programa[64],
                 path[512];
-
         /*
          * Se agrega la barra para completar el path de la env var
          */
         strcpy(nombre_programa,"/");
 
+        aux=strdup(getenv("PATH"));
         /*
          * copiamos solo el contenido de la env var $PATH en aux
          */
-        strcpy(aux,getenv("PATH"));
         aux=strtok(aux,":");
 
         /*

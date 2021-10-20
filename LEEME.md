@@ -32,4 +32,4 @@ Ademas en la version de tp5 se agrega:
 ### Bugs:
 * echo no parsea texto$varenv sin separar
 * Algunas entradas de texto muy especificas generan un *malloc(): Invalid size (unsorted)*
-* Por alguna razon, luego de hacer una redireccion de std, los wait() dejan de funcionar lo cual lleva al riesgo de generar procesos zombies.
+

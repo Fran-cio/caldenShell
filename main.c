@@ -15,11 +15,11 @@
 
 int main(int argc,char** argv) 
 {   
-    set_func_sig(SIG_IGN);
+    set_func_sig(SIG_IGN); //Con este comando, el programa ignora las señales externas
 
-    int background_flag;        //Si hay un proceso corriendo en segundo plano, se activa
-    int pipe_flag;
-    int IO_flag;
+    int background_flag;    //Si hay un proceso corriendo en segundo plano, se activa
+    int pipe_flag;          //Si hay un pipe, se activa
+    int IO_flag;            //Si hay un redireccion I/O, se activa
     /*
      * Da mensaje de bienvenida 
      */
@@ -35,7 +35,7 @@ int main(int argc,char** argv)
     {
         while(1)
         {
-            background_flag=0;  //La flag se inicia en 0 
+            background_flag=0;  //Los flags se inician en 0 
             pipe_flag=0;
             IO_flag=0;
             char *comando;      //los comandos ingresados se almacenan aqui
@@ -44,10 +44,14 @@ int main(int argc,char** argv)
              * La funcion devuelve un mensaje ingresado por teclado
              */
             comando=linea();
-            if (strchr(comando, '|')!=NULL) {
-                get_pipe(comando);
-                pipe_flag=1;
-            }
+            comando[strcspn(comando, "\n")] = '\000';
+            /*
+             * verifica si hay un pipe en el comando ingeresado
+             */
+            pipe_flag=get_pipe(comando); 
+            /*
+             * Verifica si hay una redireccion en el I/O standar
+             */
             IO_flag=IO(comando);
             /*
              * Verifica si efectivamente el comando tiene la orden de ser

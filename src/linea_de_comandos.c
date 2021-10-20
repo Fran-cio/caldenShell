@@ -82,15 +82,15 @@ void comandos(char *comando)
             int pipe_flag=0;
             int IO_flag=0;
             /*
-             * verifica si hay pipe
-             */
- 
-            pipe_flag=get_pipe(comando); 
-            /*
              * Verifica si hay una redireccion en el I/O standar
              */
             IO_flag=IO(comando);
+ 
             /*
+             * verifica si hay pipe
+             */
+            pipe_flag=get_pipe(comando); 
+           /*
              * Verifica si efectivamente el comando tiene la orden de ser
              * ejecutado en 2do plano
              */

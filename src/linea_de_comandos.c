@@ -1,3 +1,7 @@
+#include "../include/tp5/signals.h"
+#include "../include/tp5/pipe.h"
+#include "../include/tp5/I.O.h"
+
 #include "../include/comandos/echo.h"
 #include "../include/comandos/cd.h"
 #include "../include/comandos/quit.h"
@@ -15,7 +19,7 @@ void print_mensaje_de_intro();
 void help(void);
 void dormir(char*);
 
-void comandos(char* comando)
+void linea_comandos(char* comando)
 {
     /*
      *  Elimino el caracter '\n' y parseo el comando
@@ -72,7 +76,42 @@ void comandos(char* comando)
         }
     }   
 }
-
+void comandos(char *comando)
+{
+            int background_flag=0;  //Los flags se inician en 0 
+            int pipe_flag=0;
+            int IO_flag=0;
+            /*
+             * verifica si hay pipe
+             */
+ 
+            pipe_flag=get_pipe(comando); 
+            /*
+             * Verifica si hay una redireccion en el I/O standar
+             */
+            IO_flag=IO(comando);
+            /*
+             * Verifica si efectivamente el comando tiene la orden de ser
+             * ejecutado en 2do plano
+             */
+            background_flag=segundo_plano(comando); 
+            /*
+             *  Contrario al criterio de dejar el main lo mas limpio posible[1]
+             *  aca tome la decision usar efectivamente la variable background_flag
+             *  porque considere que era mas ilustrativo para que se vea su funcion
+             *  en lugar de hacer simplemente if(!segundo_plano(comando))
+             *  lo cual hubiera sintetizado el codigo y eliminado esa variable
+             *  pero sin duda hubiera sido mas dificil de seguir.
+             */
+            if(!background_flag&&!pipe_flag&&!IO_flag)
+            {
+                /*
+                 *  Si la background_flag esta en bajo, el comando se ejecuta con
+                 *  normalidad y se manda lo ingresado a la funcion encargada
+                 */
+                linea_comandos(comando);
+            }
+}
 char* get_hostname()
 {
     /* creo una variable hostname donde voy a guardar dicho parametro y con

@@ -39,7 +39,7 @@ int IO(char* comando)
       {
          perror("fork");
       }
-      else if (pid==(pid_t)0)
+      else if (pid==0)
       {
          /*
           * El proceso hijo se encagarga de gestionar de donde va a recibir

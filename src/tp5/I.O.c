@@ -93,8 +93,8 @@ int IO(char* comando)
                 * Envio el stream para ser escrito y el archivo para ser leido
                 */
                gestor_IO(file1, stream1); 
-               close(fds_input[1]);
             }
+            close(fds_input[1]);
             close(fds_output[1]);
             if (aux_output!=NULL) {
                /* 
@@ -113,8 +113,8 @@ int IO(char* comando)
                 * Envio el stream para ser leido y el archivo para ser escrito
                 */
                gestor_IO(stream2, file2);
-               close(fds_output[0]);
             }
+            close(fds_output[0]);
             exit(0);
          }
          /*

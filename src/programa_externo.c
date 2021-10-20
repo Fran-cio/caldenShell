@@ -37,20 +37,18 @@ void programa_externo(char *comando)
              *  ejecutor() recibe este arreglo y los parcea para manejarlos de la
              *  manera correcta, si puede hacerlo, devuelve -1, sino da un mensaje
              */
-            if(ejecutor(temp)!=-1){}
+            if(ejecutor(temp)!=-1){
+            }
             else 
             {
                 printf("Comando desconocido, ingrese help para conocerlos comandos"
                         " disponibles");
-                exit(0);
             }
+            exit(0);
             break;
-        default:
-            wait(0);
-            printf("\n");
-            break;
-
     }
+    wait(0);
+    printf("\n");
 }
 
 int ejecutor(char **temp)
@@ -162,7 +160,6 @@ int ejecutor(char **temp)
 
 char** ordenar_argumentos(char* comando)
 {
-    //Cantidad maxima de argumentos que la funcion va a aceptar es 3
     char **temp;
     temp=(char**)malloc(sizeof(char));
     int i=0;

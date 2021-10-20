@@ -118,7 +118,9 @@ void help(void)
             "\n\tcd <path>: Coloca el directorio de trabajo en el path asignado"
             "\n\tquit: cierra la consola"
             "\nPuede ingresar el path de un programa para ejecutarlo"
-            "\nPuede ejecutar My_Shell con el path de un script de la manera ./myshell <script>\n");
+            "\nPuede ejecutar My_Shell con el path de un script de la manera ./myshell <script>"
+            "\nPuede utilizar multiples pipe's 'comando1 | comando2' , con el cual conectamos la salida std de comando1 con la entrada std de comando2" 
+            "\nPuede redigir la entrada (<) o salida (>), la manera 'programa (<|>) text'\n");
 }
 
 /*

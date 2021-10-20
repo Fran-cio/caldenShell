@@ -1,3 +1,4 @@
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -62,7 +63,7 @@ int ejecutor(char **temp)
         /*
          * Si se ejecuta, bien, sino devuelve -1
          */
-       if(execv(temp[0],temp)!=-1){}
+        if(execv(temp[0],temp)!=-1){}
         else 
         {
             return -1;
@@ -113,19 +114,17 @@ int ejecutor(char **temp)
     }
     else
     {
-        aux=(char*)malloc(sizeof(char)*1024);
         char    nombre_programa[64],
                 path[512];
-
         /*
          * Se agrega la barra para completar el path de la env var
          */
         strcpy(nombre_programa,"/");
 
+        aux=strdup(getenv("PATH"));
         /*
          * copiamos solo el contenido de la env var $PATH en aux
          */
-        strcpy(aux,getenv("PATH"));
         aux=strtok(aux,":");
 
         /*
@@ -160,7 +159,6 @@ int ejecutor(char **temp)
 
 char** ordenar_argumentos(char* comando)
 {
-    //Cantidad maxima de argumentos que la funcion va a aceptar es 3
     char **temp;
     temp=(char**)malloc(sizeof(char));
     int i=0;

@@ -125,6 +125,7 @@ int IO(char* comando)
          close(fds_output[0]);
          close(fds_output[1]);
          wait(0);
+         wait(0);
          sleep(1);
          return 1;
       }

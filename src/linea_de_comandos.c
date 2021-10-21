@@ -15,7 +15,7 @@ void print_mensaje_de_intro();
 void help(void);
 void dormir(char*);
 
-void comandos(char* comando)
+void comandos_linea(char* comando)
 {
     /*
      *  Elimino el caracter '\n' y parseo el comando
@@ -71,6 +71,33 @@ void comandos(char* comando)
             programa_externo(comando);
         }
     }   
+}
+void comandos(char *comando)
+{
+
+    int background_flag=0;  //La flag se inicia en 0 
+    /*
+     * Verifica si efectivamente el comando tiene la orden de ser
+     * ejecutado en 2do plano
+     */
+    background_flag=segundo_plano(comando); 
+    /*
+     *  Contrario al criterio de dejar el main lo mas limpio posible[1]
+     *  aca tome la decision usar efectivamente la variable background_flag
+     *  porque considere que era mas ilustrativo para que se vea su funcion
+     *  en lugar de hacer simplemente if(!segundo_plano(comando))
+     *  lo cual hubiera sintetizado el codigo y eliminado esa variable
+     *  pero sin duda hubiera sido mas dificil de seguir.
+     */
+    if(!background_flag)
+    {
+        /*
+         *  Si la background_flag esta en bajo, el comando se ejecuta con
+         *  normalidad y se manda lo ingresado a la funcion encargada
+         */
+        comandos_linea(comando);
+    }
+
 }
 
 char* get_hostname()

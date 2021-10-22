@@ -32,4 +32,3 @@ Ademas en la version de tp5 se agrega:
 ### Bugs:
 * echo no parsea texto$varenv sin separar
 * Algunas entradas de texto muy especificas generan un *malloc(): Invalid size (unsorted)*
-* Hacer la combinacion Ctrl-D, genera que el programa deje de pedir input y genere un bucle que solo se puede salir cerrando la pestaña. 

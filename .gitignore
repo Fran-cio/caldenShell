@@ -3,3 +3,6 @@
 *.out
 *.a
 my_shell
+node_modules
+*.json
+.husky

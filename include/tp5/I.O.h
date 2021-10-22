@@ -1,1 +1,0 @@
-int IO(char* comando);

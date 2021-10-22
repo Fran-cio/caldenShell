@@ -19,6 +19,7 @@ void print_mensaje_de_intro();
 void help(void);
 void dormir(char*);
 
+
 void linea_comandos(char* comando)
 {
     /*
@@ -112,6 +113,7 @@ void comandos(char *comando)
                 linea_comandos(comando);
             }
 }
+
 char* get_hostname()
 {
     /* creo una variable hostname donde voy a guardar dicho parametro y con

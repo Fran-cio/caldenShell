@@ -7,8 +7,8 @@
 
 int main(int argc,char** argv) 
 {   
-    set_func_sig(SIG_IGN); //Con este comando, el programa ignora las señales externas
 
+    set_func_sig(SIG_IGN); //Con este comando, el programa ignora las señales externas
     /*
      * Da mensaje de bienvenida 
      */
@@ -24,14 +24,12 @@ int main(int argc,char** argv)
     {
         while(1)
         {
-           char *comando;      //los comandos ingresados se almacenan aqui
-
+            char *comando;      //los comandos ingresados se almacenan aqui
             /*
              * La funcion devuelve un mensaje ingresado por teclado
              */
             comando=linea();
             comando[strcspn(comando, "\n")] = '\000';
-        
             comandos(comando);
         }
     }

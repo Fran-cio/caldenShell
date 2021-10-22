@@ -129,11 +129,7 @@ char* linea()
             getlogin(),hostname,getenv("PWD"));
     free(hostname);
 
-    if(fgets(comando,1024,stdin)==NULL)
-    {
-        perror("input");
-        exit(EXIT_FAILURE);
-    }
+    fgets(comando,1024,stdin);
 
     return comando;
 }

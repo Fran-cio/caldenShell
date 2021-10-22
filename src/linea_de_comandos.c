@@ -146,7 +146,8 @@ char* linea()
 
     if(fgets(comando,1024,stdin)==NULL)
     {
-        exit(EXIT_SUCCESS);
+        perror("input");
+        exit(EXIT_FAILURE);
     }
     return comando;
 }

@@ -29,6 +29,7 @@ int main(int argc,char** argv)
              * La funcion devuelve un mensaje ingresado por teclado
              */
             comando=linea();
+
             comando[strcspn(comando, "\n")] = '\000';
             comandos(comando);
         }

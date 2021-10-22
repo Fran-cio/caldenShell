@@ -1,3 +1,5 @@
+#include "../include/tp5/signals.h"
+
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,6 +26,7 @@ void programa_externo(char *comando)
             exit(1);
             break;
         case 0:
+           set_func_sig(SIG_DFL); //agrego esta linea para que el proc hijo responda a las señales
             /*
              *  La funcion ordenar_argumentos, devuelve el programa y los argumentos
              *  almacenados en un arreglo de strings
@@ -34,20 +37,18 @@ void programa_externo(char *comando)
              *  ejecutor() recibe este arreglo y los parcea para manejarlos de la
              *  manera correcta, si puede hacerlo, devuelve -1, sino da un mensaje
              */
-            if(ejecutor(temp)!=-1){}
+            if(ejecutor(temp)!=-1){
+            }
             else 
             {
                 printf("Comando desconocido, ingrese help para conocerlos comandos"
                         " disponibles");
-                exit(0);
             }
+            exit(0);
             break;
-        default:
-            wait(0);
-            printf("\n");
-            break;
-
     }
+    wait(0);
+    printf("\n");
 }
 
 int ejecutor(char **temp)

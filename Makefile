@@ -2,37 +2,57 @@ CC=gcc
 CFLAGS=-Wall -Werror -pedantic 
 PATHh=./include/
 PATHrec=./src/
+PATHrec_tp5=./src/tp5/
+PATHrec_com=./src/comandos/
 PATHout=./out/
 PATHlib=./lib/
 PATHbin=./bin/
 
-Tp4: $(PATHbin)my_shell
+Tp5: $(PATHbin)my_shell
+	
+my_shell_db: $(PATHout)my_shell.o $(PATHlib)libtp4.a $(PATHlib)lib_comandos.a $(PATHlib)lib_tp5.a 
+	$(CC) $(CFLAGS) -g -O2 $(PATHout)my_shell.o -L$(PATHlib) -ltp4 -l_comandos -l_tp5 
 
-$(PATHbin)my_shell: $(PATHout)my_shell.o $(PATHlib)libtp4.a $(PATHlib)lib_comandos.a 
+$(PATHbin)my_shell: $(PATHout)my_shell.o $(PATHlib)libtp4.a $(PATHlib)lib_comandos.a $(PATHlib)lib_tp5.a 
 	mkdir -p $(PATHbin)
-	$(CC) $(CFLAGS) -o $(PATHbin)my_shell $(PATHout)my_shell.o -L$(PATHlib) -ltp4 -l_comandos 
+	$(CC) $(CFLAGS) -o $(PATHbin)my_shell $(PATHout)my_shell.o -L$(PATHlib) -ltp4 -l_comandos -l_tp5 
+
+$(PATHout)signals.o: $(PATHrec_tp5)signals.c 
+	$(CC) $(CFLAGS) -c $(PATHrec_tp5)signals.c
+	mv ./signals.o $(PATHout)
+	
+$(PATHout)I.O.o: $(PATHrec_tp5)I.O.c 
+	$(CC) $(CFLAGS) -c $(PATHrec_tp5)I.O.c
+	mv ./I.O.o $(PATHout)
+
+$(PATHout)pipe.o: $(PATHrec_tp5)pipe.c 
+	$(CC) $(CFLAGS) -c $(PATHrec_tp5)pipe.c
+	mv ./pipe.o $(PATHout)
+
+$(PATHlib)lib_tp5.a: $(PATHout)signals.o $(PATHout)pipe.o $(PATHout)I.O.o
+	mkdir -p $(PATHlib) 
+	ar cr $(PATHlib)lib_tp5.a  $(PATHout)signals.o $(PATHout)pipe.o $(PATHout)I.O.o
 
 $(PATHout)my_shell.o: main.c 
 	mkdir -p $(PATHout)
 	$(CC) $(CFLAGS) -c main.c
 	mv ./main.o $(PATHout)/my_shell.o
 
-$(PATHout)cd.o: $(PATHrec)comandos/cd.c 
-	$(CC) $(CFLAGS) -c $(PATHrec)/comandos/cd.c
+$(PATHout)cd.o: $(PATHrec_com)cd.c 
+	$(CC) $(CFLAGS) -c $(PATHrec_com)cd.c
 	mv ./cd.o $(PATHout)
 
-$(PATHout)echo.o: $(PATHrec)comandos/echo.c
-	$(CC) $(CFLAGS) -c $(PATHrec)/comandos/echo.c
+$(PATHout)echo.o: $(PATHrec_com)echo.c
+	$(CC) $(CFLAGS) -c $(PATHrec_com)echo.c
 	mv ./echo.o $(PATHout)
 
-$(PATHout)clr.o: $(PATHrec)comandos/clr.c 
-	$(CC) $(CFLAGS) -c $(PATHrec)/comandos/clr.c
+$(PATHout)clr.o: $(PATHrec_com)clr.c 
+	$(CC) $(CFLAGS) -c $(PATHrec_com)clr.c
 	mv ./clr.o $(PATHout)
 
-$(PATHout)quit.o: $(PATHrec)comandos/quit.c
-	$(CC) $(CFLAGS) -c $(PATHrec)/comandos/quit.c
+$(PATHout)quit.o: $(PATHrec_com)quit.c
+	$(CC) $(CFLAGS) -c $(PATHrec_com)quit.c
 	mv ./quit.o $(PATHout)
-
 
 $(PATHout)leer_desde_script.o: $(PATHrec)leer_desde_script.c  
 	$(CC) $(CFLAGS) -c $(PATHrec)leer_desde_script.c 

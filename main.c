@@ -24,16 +24,13 @@ int main(int argc,char** argv)
     {
         while(1)
         {
-
-           char *comando;      //los comandos ingresados se almacenan aqui
-
+            char *comando;      //los comandos ingresados se almacenan aqui
             /*
              * La funcion devuelve un mensaje ingresado por teclado
              */
             comando=linea();
 
             comando[strcspn(comando, "\n")] = '\000';
-
             comandos(comando);
         }
     }

@@ -79,6 +79,7 @@ void linea_comandos(char* comando)
 }
 void comandos(char *comando)
 {
+
             int background_flag=0;  //Los flags se inician en 0 
             int pipe_flag=0;
             int IO_flag=0;
@@ -145,10 +146,8 @@ char* linea()
 
     if(fgets(comando,1024,stdin)==NULL)
     {
-        perror("input");
-        exit(EXIT_FAILURE);
+        exit(EXIT_SUCCESS);
     }
-
     return comando;
 }
 

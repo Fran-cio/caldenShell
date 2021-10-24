@@ -93,9 +93,6 @@ void finalizar(void)
 }
 void look_the_flowers_Lizzie(int status)
 {
-    int kidpid;
-    
-    while ((kidpid = waitpid(-1, &status, WNOHANG)) > 0)
-    {
-    }
+    int pid_hijo;
+    while ((pid_hijo = waitpid(-1, &status, WNOHANG)) > 0){}
 }

@@ -27,7 +27,6 @@ void programa_externo(char *comando)
             exit(1);
             break;
         case 0:
-           set_func_sig(SIG_DFL); //agrego esta linea para que el proc hijo responda a las señales
             /*
              *  La funcion ordenar_argumentos, devuelve el programa y los argumentos
              *  almacenados en un arreglo de strings
@@ -48,6 +47,7 @@ void programa_externo(char *comando)
             exit(0);
             break;
     }
+    set_func_sig(SIG_IGN);
     wait(0);
     printf("\n");
 }

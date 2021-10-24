@@ -1,3 +1,4 @@
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,6 +7,7 @@
 #include <sys/mman.h>
 #include "../include/linea_de_comandos.h"
 
+void look_the_flowers_Lizzie(int);
 void finalizar(void);
 int *punt_cont;
 
@@ -47,7 +49,7 @@ int segundo_plano(char *comando)
                  * Imprimo los indicadores de back y ejecuto el programa
                  */
                 printf("\r[%d] %d \n",jobID,getpid()); 
-                comandos(comando);
+                finder(comando);
                 printf("\r[%d] + %d done\n",jobID,getpid());
                 /*
                  * Descuento el contador al salir del programa
@@ -64,6 +66,7 @@ int segundo_plano(char *comando)
                  * Seteo que a la salida del programa espere a los posibles proce
                  * sos que se quedaron ejecutandose
                  */
+                signal(SIGCHLD,look_the_flowers_Lizzie);
                 atexit(finalizar); 
                 sleep(1);//para que no se superpongan salidas, coloco un pequeño delay
                 /*
@@ -87,4 +90,9 @@ void finalizar(void)
      * Libero el espacio de memoria compartido
      */
     munmap(punt_cont, sizeof(int));
+}
+void look_the_flowers_Lizzie(int status)
+{
+    int pid_hijo;
+    while ((pid_hijo = waitpid(-1, &status, WNOHANG)) > 0){}
 }

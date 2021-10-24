@@ -6,8 +6,8 @@
 #include <unistd.h>
 #include <sys/mman.h>
 #include "../include/linea_de_comandos.h"
+#include "../include/tp5/signals.h"
 
-void look_the_flowers_Lizzie(int);
 void finalizar(void);
 int *punt_cont;
 
@@ -66,7 +66,7 @@ int segundo_plano(char *comando)
                  * Seteo que a la salida del programa espere a los posibles proce
                  * sos que se quedaron ejecutandose
                  */
-                signal(SIGCHLD,look_the_flowers_Lizzie);
+                signal(SIGCHLD,sigHandler);
                 atexit(finalizar); 
                 sleep(1);//para que no se superpongan salidas, coloco un pequeño delay
                 /*
@@ -90,9 +90,4 @@ void finalizar(void)
      * Libero el espacio de memoria compartido
      */
     munmap(punt_cont, sizeof(int));
-}
-void look_the_flowers_Lizzie(int status)
-{
-    int pid_hijo;
-    while ((pid_hijo = waitpid(-1, &status, WNOHANG)) > 0){}
 }

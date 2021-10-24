@@ -47,8 +47,16 @@ void programa_externo(char *comando)
             exit(0);
             break;
     }
+    signal(SIGCHLD,sigHandler);
     set_func_sig(SIG_IGN);
-    wait(0);
+    pause();
+
+    /*
+     * Cuando el proceso hijo se le ejecuta ctrl-z pero el padre lo ignora,
+     * se genera una situacion donde el padre jamas detecta que su hijo finaliza
+     * por ello le asigno un handler en particular en lugar de un wait
+     */
+
     printf("\n");
 }
 
@@ -70,54 +78,54 @@ int ejecutor(char **temp)
         {
             return -1;
         }
-          /*-------------------QUEDA DE RECUERDO---------------------------------*/
-         /** No es la implementacion mas elegante pero es la mas simple para cumplir*/
-         /** lo que se requiere, ya que execl no interpreta los espacios del arreglo*/
-         /** vacios como espacios vacios*/
-         /***/
- 
+        /*-------------------QUEDA DE RECUERDO---------------------------------*/
+        /** No es la implementacion mas elegante pero es la mas simple para cumplir*/
+        /** lo que se requiere, ya que execl no interpreta los espacios del arreglo*/
+        /** vacios como espacios vacios*/
+        /***/
+
 
         /** filtro el nombre del programa siendo este lo que este despues de la ultima*/
         /** '/', se almacena eso y se elimina la '/'*/
-        
+
         /*aux=strrchr(temp[0],'/');*/
         /*aux++;*/
 
 
         /*switch (i-1) {*/
-            /*case 0:*/
-                /*if(execl(temp[0],aux,(char *)0)!=-1){}*/
-                /*else */
-                /*{*/
-                    /*return -1;*/
-                /*}*/
-                /*break;*/
-            /*case 1:*/
-                /*if(execl(temp[0],aux,temp[1],(char *)0)!=-1){}*/
-                /*else */
-                /*{*/
-                    /*return -1;*/
-                /*}*/
-                /*break;*/
-            /*case 2:*/
-                /*if(execl(temp[0],aux,temp[1],temp[2],(char *)0)!=-1){}*/
-                /*else */
-                /*{*/
-                    /*return -1;*/
-                /*}*/
-                /*break;*/
-            /*case 3:*/
-                /*if(execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1){}*/
-                /*else */
-                /*{*/
-                    /*return -1;*/
-                /*}*/
+        /*case 0:*/
+        /*if(execl(temp[0],aux,(char *)0)!=-1){}*/
+        /*else */
+        /*{*/
+        /*return -1;*/
+        /*}*/
+        /*break;*/
+        /*case 1:*/
+        /*if(execl(temp[0],aux,temp[1],(char *)0)!=-1){}*/
+        /*else */
+        /*{*/
+        /*return -1;*/
+        /*}*/
+        /*break;*/
+        /*case 2:*/
+        /*if(execl(temp[0],aux,temp[1],temp[2],(char *)0)!=-1){}*/
+        /*else */
+        /*{*/
+        /*return -1;*/
+        /*}*/
+        /*break;*/
+        /*case 3:*/
+        /*if(execl(temp[0],aux,temp[1],temp[2],temp[3],(char *)0)!=-1){}*/
+        /*else */
+        /*{*/
+        /*return -1;*/
+        /*}*/
         /*}*/
     }
     else
     {
         char    nombre_programa[64],
-                path[512];
+        path[512];
         /*
          * Se agrega la barra para completar el path de la env var
          */

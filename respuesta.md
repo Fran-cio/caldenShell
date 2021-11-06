@@ -41,7 +41,7 @@ nodev	aufs
 ```
 Buscando un poco mas, ahora con un concepto especifico, di con el siguiente [Link](https://www.quora.com/What-is-the-use-of-%E2%80%9Cpipefs%E2%80%9D-on-Linux-systems "What is the use of “pipefs” on Linux systems?").
 El cual cita una pagina que no esta disponible. Pero el, resume algo asi:
-> PipeFS es un filesystem virtual unico. Este filesystem es montado en el kernel por lo tanto en el 
+> PipeFS es un filesystem virtual unico. Este filesystem es montado en el kernel en lugar de en el 
 > espacio de el usuario.
 
 Como detalle interesante destaca:

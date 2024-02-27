@@ -8,14 +8,14 @@ PATHout=./out/
 PATHlib=./lib/
 PATHbin=./bin/
 
-Tp5: $(PATHbin)my_shell
+Tp5: $(PATHbin)caldel_shell
 	
-my_shell_db: $(PATHout)my_shell.o $(PATHlib)libtp4.a $(PATHlib)lib_comandos.a $(PATHlib)lib_tp5.a 
-	$(CC) $(CFLAGS) -g -O2 $(PATHout)my_shell.o -L$(PATHlib) -ltp4 -l_comandos -l_tp5 
+caldel_shell_db: $(PATHout)caldel_shell.o $(PATHlib)libtp4.a $(PATHlib)lib_comandos.a $(PATHlib)lib_tp5.a 
+	$(CC) $(CFLAGS) -g -O2 $(PATHout)caldel_shell.o -L$(PATHlib) -ltp4 -l_comandos -l_tp5 
 
-$(PATHbin)my_shell: $(PATHout)my_shell.o $(PATHlib)libtp4.a $(PATHlib)lib_comandos.a $(PATHlib)lib_tp5.a 
+$(PATHbin)caldel_shell: $(PATHout)caldel_shell.o $(PATHlib)libtp4.a $(PATHlib)lib_comandos.a $(PATHlib)lib_tp5.a 
 	mkdir -p $(PATHbin)
-	$(CC) $(CFLAGS) -o $(PATHbin)my_shell $(PATHout)my_shell.o -L$(PATHlib) -ltp4 -l_comandos -l_tp5 
+	$(CC) $(CFLAGS) -o $(PATHbin)caldel_shell $(PATHout)caldel_shell.o -L$(PATHlib) -ltp4 -l_comandos -l_tp5 
 
 $(PATHout)signals.o: $(PATHrec_tp5)signals.c 
 	$(CC) $(CFLAGS) -c $(PATHrec_tp5)signals.c
@@ -33,10 +33,10 @@ $(PATHlib)lib_tp5.a: $(PATHout)signals.o $(PATHout)pipe.o $(PATHout)I.O.o
 	mkdir -p $(PATHlib) 
 	ar cr $(PATHlib)lib_tp5.a  $(PATHout)signals.o $(PATHout)pipe.o $(PATHout)I.O.o
 
-$(PATHout)my_shell.o: main.c 
+$(PATHout)caldel_shell.o: main.c 
 	mkdir -p $(PATHout)
 	$(CC) $(CFLAGS) -c main.c
-	mv ./main.o $(PATHout)/my_shell.o
+	mv ./main.o $(PATHout)/caldel_shell.o
 
 $(PATHout)cd.o: $(PATHrec_com)cd.c 
 	$(CC) $(CFLAGS) -c $(PATHrec_com)cd.c

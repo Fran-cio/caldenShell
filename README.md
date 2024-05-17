@@ -42,7 +42,7 @@
     <a href="https://github.com/Fran-cio/caldenShell"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Fran-cio/caldenShell/caldenShell">View Demo</a>
+    <a href="https://github.com/Fran-cio/caldenShell">View Demo</a>
     ·
     <a href="https://github.com/Fran-cio/caldenShell/issues">Report Bug</a>
     ·
